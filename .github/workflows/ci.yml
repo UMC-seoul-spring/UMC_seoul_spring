@@ -41,22 +41,23 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Set test environment using docker-compose
+      - name: Set up Redis container
         run: |
-          docker-compose -f ./docker/docker-compose.yml up -d
-          echo "Waiting for services to be ready.."
+          docker-compose -f ./docker/redis-compose.yml up -d
+          echo "Waiting for Redis to be ready.."
           for i in {1..30}; do
-            docker ps | grep mysql-local && docker ps | grep redis-local && echo "✅ Services ready." && break
-            echo "⏳ Waiting... ($i)"
+            docker ps | grep redis-local && echo "✅ Redis ready." && break
+            echo "⏳ Waiting for Redis... ($i)"
             sleep 2
           done
 
-      - name: Create .env file from GitHub Secrets
+      - name: Create .env file for RDS and Redis
         run: |
-          echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
-          echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
-          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env
-          echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
+          echo "DB_HOST=${{ secrets.RDS_ENDPOINT }}" >> .env
+          echo "DB_PORT=${{ secrets.RDS_PORT }}" >> .env
+          echo "DB_DATABASE=${{ secrets.RDS_DATABASE }}" >> .env
+          echo "DB_USERNAME=${{ secrets.RDS_USERNAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.RDS_PASSWORD }}" >> .env
           echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
 
       - name: Run tests
@@ -68,6 +69,6 @@ jobs:
         with:
           junit_files: '**/build/test-results/test/**/*.xml'
 
-      - name: Clean up containers
+      - name: Clean up Redis container
         if: always()
-        run: docker-compose -f ./docker/docker-compose.yml down
+        run: docker-compose -f ./docker/redis-compose.yml down
