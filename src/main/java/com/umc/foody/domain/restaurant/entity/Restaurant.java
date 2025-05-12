@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.umc.foody.domain.businesshour.entity.BusinessHour;
 import com.umc.foody.domain.menu.entity.Menu;
 import com.umc.foody.domain.restaurant.enums.RestaurantType;
 import com.umc.foody.domain.restaurant.image.entity.RestaurantImage;
@@ -52,6 +53,10 @@ public class Restaurant extends BaseEntity {
 	@Builder.Default
 	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Menu> menus = new ArrayList<>();
+
+	@Builder.Default
+	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<BusinessHour> businessHours = new ArrayList<>();
 
 	/**
 	 * 필드
