@@ -1,0 +1,49 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  # 개발 서버 데이터베이스 설정
+  datasource:
+    url: jdbc:mysql://dev-db-server:3306/foody_dev
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 10
+      idle-timeout: 300000
+      max-lifetime: 1200000
+
+  # 개발 서버 Redis 설정
+  data:
+    redis:
+      host: ${REDIS_HOST:dev-redis-server}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      connection-pool-timeout: 2000ms
+      jedis:
+        pool:
+          min-idle: 0
+          max-idle: 8
+          max-active: 8
+
+  # 개발 서버 JPA 설정
+  jpa:
+    show-sql: false  # 개발 서버에서는 SQL 출력 비활성화
+    hibernate:
+      ddl-auto: validate  # 스키마 검증만 수행
+    properties:
+      hibernate:
+        show_sql: false
+
+# 개발 서버 로깅 설정
+logging:
+  level:
+    com.umc.foody: INFO
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN
+  file:
+    name: logs/foody-dev.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
