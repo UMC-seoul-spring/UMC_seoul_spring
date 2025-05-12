@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: foody
+
+  # JPA ? Hibernate ?? ??
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        spatial:
+          enabled: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        format_sql: true
+        use_sql_comments: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+# ?? ??
+logging:
+  level:
+    com.umc.foody: INFO
+    org.springframework.security: INFO
+    org.hibernate.SQL: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: INFO

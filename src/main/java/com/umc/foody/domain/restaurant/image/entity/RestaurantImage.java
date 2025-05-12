@@ -1,17 +1,11 @@
-package com.umc.foody.domain.mission.entity;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+package com.umc.foody.domain.restaurant.image.entity;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.umc.foody.domain.missionhistory.entity.MissionHistory;
 import com.umc.foody.domain.restaurant.entity.Restaurant;
 import com.umc.foody.global.common.base.BaseEntity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,7 +14,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,11 +27,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @DynamicUpdate
-public class Mission extends BaseEntity {
+public class RestaurantImage extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "mission_id")
+	@Column(name = "restaurant_image_id")
 	private Long id;
 
 	/**
@@ -48,17 +41,9 @@ public class Mission extends BaseEntity {
 	@JoinColumn(name = "restaurant_id")
 	private Restaurant restaurant;
 
-	@Builder.Default
-	@OneToMany(mappedBy = "mission", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<MissionHistory> missionHistories = new ArrayList<>();
-
 	/**
 	 * 필드
 	 */
-	private String title;
-
-	private Integer reward;
-
-	private BigDecimal required_amount;
+	private String imageUrl;
 
 }

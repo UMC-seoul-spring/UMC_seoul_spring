@@ -1,0 +1,36 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  # 로컬 데이터베이스 설정
+  datasource:
+    url: jdbc:mysql://localhost:3306/foody?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: your_password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # 로컬 Redis 설정
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  # 로컬 JPA 설정
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update  # 로컬에서는 자동 스키마 업데이트
+    properties:
+      hibernate:
+        show_sql: true
+
+# 로컬 로깅 설정 (더 상세한 로그)
+logging:
+  level:
+    com.umc.foody: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
