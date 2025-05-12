@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   build-and-test:
+  if: ${{ secrets.RDS_ENDPOINT != '' }}
     runs-on: ubuntu-latest
 
     steps:
