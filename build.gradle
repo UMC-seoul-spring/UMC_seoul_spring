@@ -37,9 +37,6 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     // Point 데이터 타입을 나타내기 위한 라이브러리
-    // Hibernate Spatial 의존성 (Spring Boot가 버전 관리)
-    implementation 'org.hibernate:hibernate-spatial'
-
     // JTS 라이브러리 (공간 연산을 위한 라이브러리)
     implementation 'org.locationtech.jts:jts-core:1.19.0'
 }
