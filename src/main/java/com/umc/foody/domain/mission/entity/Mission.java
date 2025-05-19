@@ -55,10 +55,19 @@ public class Mission extends BaseEntity {
 	/**
 	 * 필드
 	 */
-	private String title;
+	private BigDecimal reward; // 보상 금액
 
-	private Integer reward;
+	private BigDecimal requiredAmount; // 최소 결제 금액
 
-	private BigDecimal required_amount;
+	/**
+	 * 생성 팩토리 메서드
+	 */
+	public static Mission createMission(BigDecimal reward, BigDecimal requiredAmount, Restaurant restaurant) {
+		return Mission.builder()
+			.reward(reward)
+			.requiredAmount(requiredAmount)
+			.restaurant(restaurant)
+			.build();
+	}
 
 }
