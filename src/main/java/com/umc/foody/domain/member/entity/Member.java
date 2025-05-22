@@ -4,12 +4,13 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.geo.Point;
 
+import com.umc.foody.global.common.base.Address;
 import com.umc.foody.global.common.base.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -40,7 +41,7 @@ public class Member extends BaseEntity {
 	private Long id;
 
 	@Column(nullable = false, length = 10)
-	private String name;
+	private String username;
 
 	@Column(nullable = false, length = 100)
 	private String email;
@@ -55,8 +56,8 @@ public class Member extends BaseEntity {
 	@Column(length = 13)
 	private String phoneNumber;
 
-	@Column(nullable = false, columnDefinition = "POINT")
-	private Point location;
+	@Embedded
+	private Address address;
 
 	@Column(nullable = false)
 	private LocalDateTime locationUpdatedAt;

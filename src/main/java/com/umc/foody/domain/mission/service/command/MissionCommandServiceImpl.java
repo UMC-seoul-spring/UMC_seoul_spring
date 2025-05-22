@@ -24,9 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MissionCommandServiceImpl implements MissionCommandService {
 
 	private final MissionRepository missionRepository;
-
 	private final MemberRepository memberRepository;
-
 	private final RestaurantRepository restaurantRepository;
 
 	@Override
