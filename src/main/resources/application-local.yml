@@ -5,10 +5,10 @@ spring:
 
   # 로컬 데이터베이스 설정
   datasource:
-    url: jdbc:mysql://localhost:3306/foody?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    url: jdbc:p6spy:mysql://localhost:3306/foody?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
     username: root
     password: your_password
-    driver-class-name: com.mysql.cj.jdbc.Driver
 
   # 로컬 Redis 설정
   data:
@@ -18,19 +18,21 @@ spring:
 
   # 로컬 JPA 설정
   jpa:
-    show-sql: true
+    show-sql: false  # p6spy가 처리하므로 false로 변경
     hibernate:
       ddl-auto: update  # 로컬에서는 자동 스키마 업데이트
     properties:
       hibernate:
-        show_sql: true
+        show_sql: false  # p6spy가 처리하므로 false로 변경
 
-# 로컬 로깅 설정 (더 상세한 로그)
+# 로컬 로깅 설정 (p6spy 중심으로 수정)
 logging:
   level:
     com.umc.foody: DEBUG
     org.springframework.web: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    p6spy: INFO  # p6spy 로그 추가
+    # Hibernate 로그는 제거 (p6spy가 대신 처리)
+    # org.hibernate.SQL: DEBUG
+    # org.hibernate.type.descriptor.sql.BasicBinder: TRACE
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
