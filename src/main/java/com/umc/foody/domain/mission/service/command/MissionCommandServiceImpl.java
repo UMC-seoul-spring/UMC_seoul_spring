@@ -1,5 +1,7 @@
 package com.umc.foody.domain.mission.service.command;
 
+import java.util.List;
+
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import com.umc.foody.domain.mission.entity.Mission;
 import com.umc.foody.domain.mission.exception.MissionException;
 import com.umc.foody.domain.mission.exception.code.MissionErrorStatus;
 import com.umc.foody.domain.mission.repository.MissionRepository;
+import com.umc.foody.domain.mission.service.domain.MissionDomainService;
 import com.umc.foody.domain.restaurant.entity.Restaurant;
 import com.umc.foody.domain.restaurant.exception.RestaurantException;
 import com.umc.foody.domain.restaurant.exception.code.RestaurantErrorStatus;
@@ -34,31 +37,37 @@ public class MissionCommandServiceImpl implements MissionCommandService {
 	private final MissionRepository missionRepository;
 	private final MemberRepository memberRepository;
 	private final RestaurantRepository restaurantRepository;
+	private final MissionDomainService missionDomainService;
 
 	@Override
 	public CreateMissionResponseDto createMission(User currentUser, CreateMissionRequestDto request) {
 
-		// 레스토랑 가져오기
-		Restaurant myRestaurant = restaurantRepository.findById(request.getRestaurantId())
+		Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId())
 			.orElseThrow(() -> new RestaurantException(RestaurantErrorStatus.RESTAURANT_NOT_FOUND));
 
-		// 만약 currentUser가 사장님(OWNER)가 아니면 mission을 생성하지 못하도록 해야함.
-		Member currentMember = memberRepository.findByEmail(currentUser.getUsername())
+		Member currentMember = memberRepository.findByUsername(currentUser.getUsername())
 			.orElseThrow(() -> new MemberException(MemberErrorStatus.MEMBER_NOT_FOUND));
 
 		if (currentMember instanceof Owner owner) {
+			// 기존 미션들 조회 (복잡한 비즈니스 규칙이 있는 경우)
+			List<Mission> existingMissions = missionRepository.findByRestaurant(restaurant);
 
-			Mission newMission = Mission.createMission(
+			// Domain Service 활용 (복잡한 규칙이 있는 경우)
+			Mission newMission = missionDomainService.createMissionWithBusinessRules(
+				null, // title은 자동 생성
 				request.getReward(),
 				request.getRequiredAmount(),
-				myRestaurant
+				restaurant,
+				existingMissions
 			);
 
-			missionRepository.save(newMission);
+			// 또는 단순한 경우 엔티티 팩토리 메서드 직접 사용
+			// Mission newMission = Mission.createMission(null, request.getReward(), request.getRequiredAmount(), restaurant);
 
-			return CreateMissionResponseDto.from(newMission, myRestaurant);
+			missionRepository.save(newMission);
+			return CreateMissionResponseDto.from(newMission, restaurant);
+
 		} else {
-			// Owner가 아닌 경우 예외 발생
 			throw new MemberException(MemberErrorStatus.ONLY_OWNER_ALLOWED);
 		}
 	}
