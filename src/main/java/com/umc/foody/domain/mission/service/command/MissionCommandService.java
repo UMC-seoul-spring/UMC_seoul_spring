@@ -13,4 +13,6 @@ public interface MissionCommandService {
 
 	PatchMissionResponseDto updateMission(User currentUser, PatchMissionRequestDto patchMissionRequestDto,
 		Long missionId);
+
+	Void deleteMission(User currentUser, Long missionId);
 }
