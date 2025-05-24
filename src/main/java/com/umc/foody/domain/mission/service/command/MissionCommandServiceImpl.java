@@ -81,7 +81,7 @@ public class MissionCommandServiceImpl implements MissionCommandService {
 			.orElseThrow(() -> new MissionException(MissionErrorStatus.MISSION_NOT_FOUND));
 
 		// 현재 사용자 조회
-		Member currentMember = memberRepository.findByUsername(currentUser.getUsername())
+		Member currentMember = memberRepository.findByEmail(currentUser.getUsername())
 			.orElseThrow(() -> new MemberException(MemberErrorStatus.MEMBER_NOT_FOUND));
 
 		// Owner 확인
@@ -103,5 +103,21 @@ public class MissionCommandServiceImpl implements MissionCommandService {
 		} else {
 			throw new MemberException(MemberErrorStatus.ONLY_OWNER_ALLOWED);
 		}
+	}
+
+	@Override
+	public Void deleteMission(User currentUser, Long missionId) {
+		Mission mission = missionRepository.findById(missionId)
+			.orElseThrow(() -> new MissionException(MissionErrorStatus.MISSION_NOT_FOUND));
+
+		Member member = memberRepository.findByEmail(currentUser.getUsername())
+			.orElseThrow(() -> new MemberException(MemberErrorStatus.MEMBER_NOT_FOUND));
+
+		// 가게 주인이고 미션의 주인일 경우만 삭제 하도록 함.
+		if (member instanceof Owner owner && mission.getRestaurant().getId().equals(owner.getRestaurant().getId())) {
+			missionRepository.delete(mission);
+		}
+
+		return null;
 	}
 }

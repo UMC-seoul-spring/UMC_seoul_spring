@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,6 +66,13 @@ public class MissionController {
 		@PathVariable("mission-id") Long missionId
 	) {
 		return BaseResponse.onSuccess(missionCommandService.updateMission(user, request, missionId));
+	}
+
+	@DeleteMapping("/{mission-id}")
+	public BaseResponse<Void> deleteMission(@AuthenticationPrincipal User user,
+		@PathVariable("mission-id") Long missionId
+	) {
+		return BaseResponse.onSuccess(missionCommandService.deleteMission(user, missionId));
 	}
 
 	@PostMapping
