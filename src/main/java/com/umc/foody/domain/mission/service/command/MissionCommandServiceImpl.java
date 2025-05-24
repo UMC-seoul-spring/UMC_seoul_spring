@@ -47,8 +47,6 @@ public class MissionCommandServiceImpl implements MissionCommandService {
 			.orElseThrow(() -> new MemberException(MemberErrorStatus.MEMBER_NOT_FOUND));
 
 		if (currentMember instanceof Owner owner) {
-			log.info("Owner '{}' is creating mission for restaurant '{}'",
-				owner.getStore(), myRestaurant.getName());
 
 			Mission newMission = Mission.createMission(
 				request.getReward(),
@@ -78,8 +76,9 @@ public class MissionCommandServiceImpl implements MissionCommandService {
 			.orElseThrow(() -> new MemberException(MemberErrorStatus.MEMBER_NOT_FOUND));
 
 		// Owner 확인
-		if (currentMember instanceof Owner owner) {
-			log.info("Owner '{}' is updating mission {}", owner.getStore(), missionId);
+		if (currentMember instanceof Owner owner && mission.getRestaurant()
+			.getId()
+			.equals(owner.getRestaurant().getId())) {
 
 			if (request.hasReward()) {
 				mission.updateReward(request.getReward());
