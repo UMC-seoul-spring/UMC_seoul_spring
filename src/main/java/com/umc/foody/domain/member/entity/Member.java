@@ -89,4 +89,8 @@ public class Member extends BaseEntity {
 	// @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	// private List<RegionReward> regionRewardList = new ArrayList<>();
 
+	/**
+	 * 비즈니스 로직
+	 */
+
 }

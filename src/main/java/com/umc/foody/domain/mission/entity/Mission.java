@@ -70,4 +70,15 @@ public class Mission extends BaseEntity {
 			.build();
 	}
 
+	/**
+	 * 비즈니스 로직
+	 */
+	public void updateReward(BigDecimal reward) {
+		this.reward = reward;
+	}
+
+	public void updateRequiredAmount(BigDecimal requiredAmount) {
+		this.requiredAmount = requiredAmount;
+	}
+
 }

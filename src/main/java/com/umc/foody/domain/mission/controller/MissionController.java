@@ -6,6 +6,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.umc.foody.domain.mission.dto.request.CreateMissionRequestDto;
+import com.umc.foody.domain.mission.dto.request.PatchMissionRequestDto;
 import com.umc.foody.domain.mission.dto.response.CreateMissionResponseDto;
 import com.umc.foody.domain.mission.dto.response.GetMissionResponseDto;
+import com.umc.foody.domain.mission.dto.response.PatchMissionResponseDto;
 import com.umc.foody.domain.mission.enums.MissionSortType;
 import com.umc.foody.domain.mission.service.command.MissionCommandService;
 import com.umc.foody.domain.mission.service.query.MissionQueryService;
@@ -23,6 +27,7 @@ import com.umc.foody.global.common.base.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Tag(name = "Mission", description = "미션 관련 API")
@@ -53,11 +58,21 @@ public class MissionController {
 		return BaseResponse.onSuccess(missions);
 	}
 
+	@PatchMapping("/{mission-id}")
+	public BaseResponse<PatchMissionResponseDto> patchMission(
+		@AuthenticationPrincipal User user,
+		@Valid PatchMissionRequestDto request,
+		@PathVariable("mission-id") Long missionId
+	) {
+		return BaseResponse.onSuccess(missionCommandService.updateMission(user, request, missionId));
+	}
+
 	@PostMapping
 	public BaseResponse<CreateMissionResponseDto> createMission(
 		@RequestBody CreateMissionRequestDto request,
 		@AuthenticationPrincipal User currentUser
 	) {
+
 		return BaseResponse.onSuccess(
 			missionCommandService.createMission(currentUser, request)
 		);

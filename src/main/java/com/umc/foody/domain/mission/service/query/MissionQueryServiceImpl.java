@@ -33,7 +33,7 @@ public class MissionQueryServiceImpl implements MissionQueryService {
 	@Override
 	public Slice<GetMissionResponseDto> getMissionsNearBy(User user, MissionSortType sortType, Pageable pageable) {
 		// 현재 사용자 조회
-		Member currentMember = memberRepository.findByUsername(user.getUsername())
+		Member currentMember = memberRepository.findByEmail(user.getUsername())
 			.orElseThrow(() -> new MemberException(MemberErrorStatus.MEMBER_NOT_FOUND));
 
 		// 사용자의 위치 정보 확인

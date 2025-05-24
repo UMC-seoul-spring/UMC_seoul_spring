@@ -54,7 +54,12 @@ public enum MemberErrorStatus implements BaseCodeInterface {
 
 	// 이용약관 관련 오류
 	TERMS_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER4043", "이용약관을 찾을 수 없습니다."),
-	TERMS_AGREEMENT_REQUIRED(HttpStatus.BAD_REQUEST, "MEMBER4008", "필수 이용약관에 동의가 필요합니다.");
+	TERMS_AGREEMENT_REQUIRED(HttpStatus.BAD_REQUEST, "MEMBER4008", "필수 이용약관에 동의가 필요합니다."),
+
+	// 멤버 타입 관련 오류
+	ONLY_OWNER_ALLOWED(HttpStatus.FORBIDDEN, "MEMBER4035", "사장님만 이용할 수 있는 기능입니다."),
+	ONLY_CUSTOMER_ALLOWED(HttpStatus.FORBIDDEN, "MEMBER4036", "고객만 이용할 수 있는 기능입니다."),
+	INVALID_MEMBER_TYPE(HttpStatus.BAD_REQUEST, "MEMBER4037", "유효하지 않은 회원 유형입니다.");
 
 	private final HttpStatus httpStatus;
 	private final boolean isSuccess = false;
