@@ -13,6 +13,7 @@ import com.umc.foody.domain.member.exception.code.MemberErrorStatus;
 import com.umc.foody.domain.member.repository.MemberRepository;
 import com.umc.foody.domain.mission.dto.response.GetMissionResponseDto;
 import com.umc.foody.domain.mission.entity.Mission;
+import com.umc.foody.domain.mission.enums.MissionSortType;
 import com.umc.foody.domain.mission.repository.MissionQuerydslRepository;
 import com.umc.foody.global.util.DistanceCalculator;
 
@@ -30,7 +31,7 @@ public class MissionQueryServiceImpl implements MissionQueryService {
 	private final DistanceCalculator distanceCalculator;
 
 	@Override
-	public Slice<GetMissionResponseDto> getMissionsNearBy(User user, Pageable pageable) {
+	public Slice<GetMissionResponseDto> getMissionsNearBy(User user, MissionSortType sortType, Pageable pageable) {
 		// 현재 사용자 조회
 		Member currentMember = memberRepository.findByUsername(user.getUsername())
 			.orElseThrow(() -> new MemberException(MemberErrorStatus.MEMBER_NOT_FOUND));
@@ -43,12 +44,12 @@ public class MissionQueryServiceImpl implements MissionQueryService {
 		Point userLocation = currentMember.getAddress().getLocation();
 		String userEmd = currentMember.getAddress().getEmd();
 
-		log.info("사용자 위치: {} (위도: {}, 경도: {})", userEmd,
-			userLocation.getY(), userLocation.getX());
+		log.info("사용자 위치: {} (위도: {}, 경도: {}), 정렬 방식: {}",
+			userEmd, userLocation.getY(), userLocation.getX(), sortType.getDescription());
 
-		// 같은 지역(emd) 내 미션들 조회
+		// 같은 지역(emd) 내 미션들 조회 (정렬 조건 포함)
 		Slice<Mission> missions = missionQuerydslRepository.findMissionsInSameEmd(
-			userEmd, userLocation, pageable);
+			userEmd, userLocation, sortType, pageable);
 
 		// 미션들을 DTO로 변환하면서 거리 계산
 		return missions.map(mission -> {
