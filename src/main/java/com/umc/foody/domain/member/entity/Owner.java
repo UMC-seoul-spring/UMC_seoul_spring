@@ -24,5 +24,5 @@ public class Owner extends Member {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "restaurant_id")
 	private Restaurant restaurant;
-    
+
 }
