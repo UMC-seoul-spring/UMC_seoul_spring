@@ -35,6 +35,9 @@ public class RefreshToken extends BaseEntity {
 	@Column(columnDefinition = "DATETIME(6)", nullable = false)
 	private LocalDateTime issuedAt;
 
+	@Column(columnDefinition = "DATETIME(6)", nullable = false)
+	private LocalDateTime expiresAt;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id", nullable = false)
 	private Member member;

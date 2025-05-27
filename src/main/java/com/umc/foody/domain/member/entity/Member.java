@@ -1,5 +1,7 @@
 package com.umc.foody.domain.member.entity;
 
+import com.umc.foody.domain.member.enums.Gender;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -24,6 +26,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.locationtech.jts.geom.Point;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -41,10 +44,13 @@ public class Member extends BaseEntity {
 	private Long id;
 
 	@Column(nullable = false, length = 10)
-	private String username;
+	private String userName;
 
 	@Column(nullable = false, length = 100)
 	private String email;
+
+	@Column(nullable = false)
+	private BigDecimal point = BigDecimal.ZERO; //default 값 0으로 설정
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
@@ -56,6 +62,9 @@ public class Member extends BaseEntity {
 	@Column(length = 13)
 	private String phoneNumber;
 
+	@Column(nullable = false)
+	private Point location;
+
 	@Embedded
 	private Address address;
 
@@ -64,6 +73,10 @@ public class Member extends BaseEntity {
 
 	@Column(nullable = false)
 	private Long completedMissionCount;
+
+	/**
+	 * 연관관계 매핑
+	 */
 
 	// @Builder.Default
 	// @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
