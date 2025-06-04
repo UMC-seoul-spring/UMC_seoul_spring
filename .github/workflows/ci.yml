@@ -11,7 +11,6 @@ permissions:
 
 jobs:
   build-and-test:
-  if: ${{ secrets.RDS_ENDPOINT != '' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -60,6 +59,7 @@ jobs:
           echo "DB_USERNAME=${{ secrets.RDS_USERNAME }}" >> .env
           echo "DB_PASSWORD=${{ secrets.RDS_PASSWORD }}" >> .env
           echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+          
 
       - name: Run tests
         run: ./gradlew test
